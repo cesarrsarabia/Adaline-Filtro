@@ -12,10 +12,14 @@ import matplotlib.patches as mpatches
 #Variables para generar señal con ruido
 muestras = 10000
 señal_ruido = []
+#Genera señal con ruido
 Tiempo = 300
 t = []
 t = np.linspace(0, Tiempo, muestras)
 señal_ruido = 3*np.sin(t/(3*np.pi)) +  np.random.rand(muestras) 
+
+#Guarda los valores de señal con ruido en txt
+np.savetxt("senial_ruido.txt", señal_ruido,fmt = '%.20f')
 
 
 #Valores modificables tam_muestra y eta
@@ -26,16 +30,6 @@ inicioEntradas = 0
 w = np.random.rand(muestra_tomada,1)
 b = np.random.rand(1)
 y = 0
-
-
-#Guarda señal con ruido
-a = []
-for i in señal_ruido:
-    a.append(i)
-
-f=open('ruido.txt','w')
-f.write(str(señal_ruido))
-f.close()
 
 
 fig, ax = plt.subplots()
@@ -50,19 +44,11 @@ arrayEntrenamiento = señal_ruido[inicioEntradas:muestra_tomada]
 c_posicion = 0
 final = []
 
-#Obtiene señal de txt
-with open('ruido.txt','r') as f:
-        MuestasRuido = f.read()
-f.close()
-RuidoString = np.array(MuestasRuido)
-
-
 
 def get_punto_salida(w_2,b_2,entradas_2):
     c_posicion = 0
     y2 = 0
-    for x in entradas_2:
-        
+    for x in entradas_2:        
         y2 = w_2[c_posicion]*entradas_2[c_posicion] + b_2
         c_posicion = c_posicion + 1
     return y2
@@ -93,6 +79,11 @@ for x in range(0,int(len(señal_ruido)-1),1):
 #Fin Entrenamiento         
 array_filtrado = []
 array_filtrado = np.append(arrayEntrenamiento,final)
+
+
+#Escribe Arreglo se señal filtrada al archivo txt
+np.savetxt("senial_filtrada.txt", array_filtrado,fmt = '%.20f')
+
 
 #Grafica la senoidal con ruido y la senoidal filtrada encima
 plt.subplot(2, 1, 2)
